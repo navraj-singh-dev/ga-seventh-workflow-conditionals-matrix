@@ -34,14 +34,14 @@ jobs:
           path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit == 'false'
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Test code
         id: test-result
         run: npm run test
       - name: Upload test report
-        if: failure() && steps.test-result.outcome == 'failure'
-        uses: actions/upload-artifact@v3
+        if: failure() && steps.test-result.outcome != 'true'
+        uses: actions/upload-artifact@v4
         with:
           name: test-report
           path: test.json
@@ -58,7 +58,7 @@ jobs:
           path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit == 'false'
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build website
         id: build-website
@@ -73,7 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist-files
       - name: Output contents
