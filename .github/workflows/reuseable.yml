@@ -1,10 +1,23 @@
 name: reuseable
 
-on: workflow_call
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: This field describes the name of the uploaded artifact
+        required: false
+        type: string
+        default: dist
 
 jobs:
   job-one:
     runs-on: ubuntu-latest
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with: 
+          name: ${{ inputs.artifact-name }}
+      - name: List artifact files
+        run: ls
       - name: output something
         run: echo "deploying..."
