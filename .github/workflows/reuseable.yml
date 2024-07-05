@@ -23,6 +23,6 @@ jobs:
       - name: List artifact files
         run: ls
       - name: Print secret
-        run: ls "${{ secrets.some-secret }}"
+        run: echo "${{ secrets.some-secret }}"
       - name: output something
         run: echo "deploying..."
