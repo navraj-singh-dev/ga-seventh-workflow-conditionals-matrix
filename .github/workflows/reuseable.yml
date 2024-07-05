@@ -11,10 +11,16 @@ on:
     secrets:
       some-secret:
         required: false
+    outputs:
+      result:
+        description: it indicates whether this workflow was success or failure
+        value: ${{ jobs.job-one.outputs.outcome }}
 
 jobs:
   job-one:
     runs-on: ubuntu-latest
+    outputs:
+      outcome: ${{ steps.flag.outputs.set-output }}
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
@@ -26,3 +32,6 @@ jobs:
         run: echo "${{ secrets.some-secret }}"
       - name: output something
         run: echo "deploying..."
+      - name: final result of job
+        id: flag
+        run: echo "set-output=success" >> $GITHUB_OUTPUT
